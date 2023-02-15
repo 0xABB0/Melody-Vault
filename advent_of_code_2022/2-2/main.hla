@@ -1,0 +1,86 @@
+program aoc2022_2_1;
+    #include( "stdlib.hhf" )
+static
+    inputHandle:dword;
+    current_char:char;
+    score:uns32 := 0;
+
+    first_move:char;
+    second_move:char;
+
+    dummy:char;
+
+begin aoc2022_2_1;
+
+    //A: Rock: 1 point
+    //B: Paper: 2 points
+    //C: Scissor: 3 points
+
+    //WIN: 6 points
+    //DRAW: 3 points
+    //LOSS: 0 points
+
+    //X: need to lose
+    //Y: need to draw
+    //Z: need to win
+
+
+    fileio.open( "input.txt", fileio.r );
+    mov( eax, inputHandle );
+
+    while( !fileio.eof( inputHandle ) ) do
+        fileio.get( inputHandle, first_move );
+        fileio.get( inputHandle, dummy );
+        fileio.get( inputHandle, second_move );
+
+        
+        if ( second_move = 'X' ) then
+            //lose
+            //add( 0, score );
+            if ( first_move = 'A' ) then
+                // play scissors: 3 points
+                add( 3, score );
+            elseif ( first_move = 'B') then
+                // play rock: 1 point
+                add( 1, score );
+            else //first_move = 'C'
+                // play paper: 2 points
+                add( 2, score );
+            endif;
+        elseif ( second_move = 'Y' ) then
+            //draw
+            add( 3, score);
+            if ( first_move = 'A' ) then
+                // play rock: 1 point
+                add( 1, score );
+            elseif ( first_move = 'B') then
+                // play paper: 2 points
+                add( 2, score );
+            else //first_move = 'C'
+                // play scissors: 3 points
+                add( 3, score );
+            endif;
+        else //second_move = Z
+            //win
+            add( 6, score );
+            if ( first_move = 'A' ) then
+                // play paper: 2 points
+                add( 2, score );
+            elseif ( first_move = 'B') then
+                // play scissors: 3 points
+                add( 3, score );
+            else //first_move = 'C'
+                // play rock: 1 point
+                add( 1, score );
+            endif;
+        endif;
+
+
+        // /r/n on windows, since fileio.eoln doesnt seem to consume the file
+        fileio.get( inputHandle, dummy );
+        fileio.get( inputHandle, dummy );
+    endwhile;
+
+    stdout.put( "score=", score, nl );
+
+end aoc2022_2_1;

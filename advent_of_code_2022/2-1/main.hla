@@ -1,0 +1,77 @@
+program aoc2022_2_1;
+    #include( "stdlib.hhf" )
+
+const
+    fist_move_set : cset := { "ABC" };
+    second_move_set : cset := { "XYZ" };
+static
+    inputHandle:dword;
+    current_char:char;
+    score:uns32 := 0;
+
+    first_move:char;
+    second_move:char;
+
+    dummy:char;
+
+begin aoc2022_2_1;
+
+    //AX: Rock: 1 point
+    //BY: Paper: 2 points
+    //CZ: Scissor: 3 points
+
+    //WIN: 6 points
+    //DRAW: 3 points
+    //LOSS: 0 points
+
+
+    fileio.open( "input.txt", fileio.r );
+    mov( eax, inputHandle );
+
+    while( !fileio.eof( inputHandle ) ) do
+        fileio.get( inputHandle, first_move );
+        fileio.get( inputHandle, dummy );
+        fileio.get( inputHandle, second_move );
+
+        
+        if ( second_move = 'X' ) then
+            add( 1, score );
+        elseif ( second_move = 'Y' ) then
+            add( 2, score );
+        else //second_move = Z
+            add( 3, score );
+        endif;
+
+        if ( first_move = 'A' ) then
+            if ( second_move = 'X' ) then
+                add( 3, score );
+            elseif ( second_move = 'Y' ) then
+                add( 6, score );
+            else //second_move = Z
+            endif;
+        elseif (first_move = 'B') then
+            if ( second_move = 'X' ) then
+            elseif ( second_move = 'Y' ) then
+                add( 3, score );
+            else //second_move = Z
+                add( 6, score );
+            endif;
+        else //first_move = C
+            if ( second_move = 'X' ) then
+                add( 6, score );
+            elseif ( second_move = 'Y' ) then
+            else //second_move = Z
+                add( 3, score );
+            endif;
+        endif;
+
+
+
+        // /r/n on windows, since fileio.eoln doesnt seem to consume the file
+        fileio.get( inputHandle, dummy );
+        fileio.get( inputHandle, dummy );
+    endwhile;
+
+    stdout.put( "score=", score, nl );
+
+end aoc2022_2_1;
