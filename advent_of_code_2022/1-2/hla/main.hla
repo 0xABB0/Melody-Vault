@@ -1,0 +1,70 @@
+program aoc2022_1_2;
+    #include( "stdlib.hhf" )
+static
+    inputHandle:dword;
+    u:uns32;
+    c:char;
+    sum_elf:uns32 := 0;
+    consecutive_eof:uns32 := 0;
+    max_1:uns32 := 0;
+    max_2:uns32 := 0;
+    max_3:uns32 := 0;
+
+    sum_of_max:uns32 := 0;
+
+    temp:uns32 := 0;
+    temp_2:uns32 := 0;
+begin aoc2022_1_2;
+    fileio.open( "input.txt", fileio.r );
+    mov( eax, inputHandle );
+
+    while( !fileio.eof( inputHandle ) ) do
+        if ( fileio.eoln( inputHandle ) ) then
+            add( 1, consecutive_eof );
+            fileio.get( inputHandle, c );
+
+            if ( consecutive_eof > 1 ) then
+                if ( sum_elf > 0 ) then
+                    mov( sum_elf, eax);
+                    if ( eax > max_1 ) then
+                        mov( eax, temp );
+                        mov( max_2, max_3 );
+                        mov( max_1, max_2 );
+                        mov( temp, max_1);
+                    elseif ( eax > max_2 ) then
+                        mov( max_2, max_3 );
+                        mov( eax, max_2 );
+                    elseif ( eax > max_3 ) then
+                        mov( eax, max_3 );
+                    endif;
+//                    stdout.put( "sum_elf=", sum_elf, nl );
+                    mov( 0, sum_elf );
+                endif;
+            endif;
+        else
+            mov( 0, consecutive_eof );
+            fileio.get( inputHandle, u );
+
+            mov ( u, eax );
+            add ( eax, sum_elf );
+        endif;
+        
+    endwhile;
+
+//    stdout.put( "max_1=", max_1, nl );
+//    stdout.put( "max_2=", max_2, nl );
+//    stdout.put( "max_3=", max_3, nl );
+
+    mov( max_1, eax );
+    add( eax, sum_of_max );
+
+    mov( max_2, eax );
+    add( eax, sum_of_max );
+
+    mov( max_3, eax );
+    add( eax, sum_of_max );
+
+    stdout.put( "sum=", sum_of_max, nl );
+
+    fileio.close( inputHandle );
+end aoc2022_1_2;

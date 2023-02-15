@@ -1,0 +1,42 @@
+program aoc2022_1_1;
+    #include( "stdlib.hhf" )
+static
+    inputHandle:dword;
+    u:uns32;
+    c:char;
+    sum_elf:uns32 := 0;
+    consecutive_eof:uns32 := 0;
+    max:uns32 := 0;
+begin aoc2022_1_1;
+    fileio.open( "input.txt", fileio.r );
+    mov( eax, inputHandle );
+
+    while( !fileio.eof( inputHandle ) ) do
+        if ( fileio.eoln( inputHandle ) ) then
+            add( 1, consecutive_eof );
+            fileio.get( inputHandle, c );
+
+            if ( consecutive_eof > 1 ) then
+                if ( sum_elf > 0 ) then
+                    mov( sum_elf, eax);
+                    if ( eax > max ) then
+                        mov( eax, max );
+                    endif;
+//                    stdout.put( "sum_elf=", sum_elf, nl );
+                    mov( 0, sum_elf );
+                endif;
+            endif;
+        else
+            mov( 0, consecutive_eof );
+            fileio.get( inputHandle, u );
+
+            mov ( u, eax );
+            add ( eax, sum_elf );
+        endif;
+        
+    endwhile;
+
+    stdout.put( "max=", max, nl );
+
+    fileio.close( inputHandle );
+end aoc2022_1_1;
