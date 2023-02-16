@@ -1,0 +1,66 @@
+program aoc2022_3_1;
+    #include( "stdlib.hhf" )
+static
+    f:file;
+
+    current_line:string;
+
+	HelloWorld: string	:= "Hello World";
+
+    first_compartment: string;
+    second_compartment: string;
+
+    current_first_char: char;
+    current_second_char: char;
+
+    i:uns32;
+    j:uns32;
+begin aoc2022_3_1;
+
+    f.create();
+    f.open( "input.txt", fileio.r );
+
+	mov( HelloWorld, esi );
+	mov( (type str.strRec [esi]).MaxStrLen, ebx );
+	mov( (type str.strRec [esi]).length, eax );
+	
+	stdout.put( "str= """, HelloWorld, """, maxlength= ", (type int32 ebx), ", current length = ", (type int32 eax ), nl );
+
+    while( !f.eof() ) do
+        f.a_gets();
+
+        mov( eax, current_line );
+
+        mov( (type str.strRec[eax]).length, eax );
+
+        mov( 0, edx );
+        //mov( 2, ecx );
+        div( 2, edx:eax );
+
+        //stdout.put("length=", eax, " expected 0 ->", edx, nl);
+
+        mov( eax, ebx );
+
+        stralloc( ebx );
+        mov( eax, first_compartment );
+        str.substr( current_line, 0, ebx, first_compartment );
+
+        stralloc( ebx );
+        mov( eax, second_compartment );
+        str.substr( current_line, ebx, ebx, second_compartment );
+
+        mov(0, i);
+        while ( i < ebx ) do
+            mov( first_compartment + i, current_first_char);
+            //for ( mov())
+            add(1, i);
+        endwhile;
+
+        strfree( first_compartment );
+        strfree( second_compartment );
+
+
+
+    endwhile;
+
+end aoc2022_3_1;

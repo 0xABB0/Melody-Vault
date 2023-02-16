@@ -1,4 +1,4 @@
-program aoc2022_2_1;
+program aoc2022_2_2;
     #include( "stdlib.hhf" )
 static
     inputHandle:dword;
@@ -10,7 +10,7 @@ static
 
     dummy:char;
 
-begin aoc2022_2_1;
+begin aoc2022_2_2;
 
     //A: Rock: 1 point
     //B: Paper: 2 points
@@ -83,4 +83,4 @@ begin aoc2022_2_1;
 
     stdout.put( "score=", score, nl );
 
-end aoc2022_2_1;
+end aoc2022_2_2;
