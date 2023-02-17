@@ -25,7 +25,7 @@ begin aoc2022_2_2;
     //Z: need to win
 
 
-    fileio.open( "input.txt", fileio.r );
+    fileio.open( "../../input.txt", fileio.r );
     mov( eax, inputHandle );
 
     while( !fileio.eof( inputHandle ) ) do

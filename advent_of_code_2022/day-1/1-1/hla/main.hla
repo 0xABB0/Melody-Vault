@@ -8,7 +8,7 @@ static
     consecutive_eof:uns32 := 0;
     max:uns32 := 0;
 begin aoc2022_1_1;
-    fileio.open( "input.txt", fileio.r );
+    fileio.open( "../../input.txt", fileio.r );
     mov( eax, inputHandle );
 
     while( !fileio.eof( inputHandle ) ) do

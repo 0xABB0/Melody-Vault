@@ -15,7 +15,7 @@ static
     temp:uns32 := 0;
     temp_2:uns32 := 0;
 begin aoc2022_1_2;
-    fileio.open( "input.txt", fileio.r );
+    fileio.open( "../../input.txt", fileio.r );
     mov( eax, inputHandle );
 
     while( !fileio.eof( inputHandle ) ) do

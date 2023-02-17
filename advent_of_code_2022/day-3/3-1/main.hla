@@ -1,0 +1,110 @@
+program aoc2022_3_1;
+    #include( "stdlib.hhf" )
+static
+    f:file;
+
+    current_line:string;
+
+	HelloWorld: string	:= "Hello World";
+
+    first_compartment: string;
+    second_compartment: string;
+
+    current_first_char: char;
+    current_second_char: char;
+
+    common_char: char;
+
+    i:uns32;
+    j:uns32;
+
+    sum_of_values: uns32;
+begin aoc2022_3_1;
+    f.create();
+    f.open( "../input.txt", fileio.r );
+
+	mov( HelloWorld, esi );
+	mov( (type str.strRec [esi]).MaxStrLen, ebx );
+	mov( (type str.strRec [esi]).length, eax );
+	
+	stdout.put( "str= """, HelloWorld, """, maxlength= ", (type int32 ebx), ", current length = ", (type int32 eax ), nl );
+
+    mov( 0, sum_of_values );
+
+    while( !f.eof() ) do
+        f.a_gets();
+
+        mov( eax, current_line );
+
+        mov( (type str.strRec[eax]).length, eax );
+
+        mov( 0, edx );
+        //mov( 2, ecx );
+        div( 2, edx:eax );
+
+        stdout.put("length=", eax, " expected 0 ->", edx, nl);
+
+        mov( eax, ebx );
+
+        stralloc( ebx );
+        mov( eax, first_compartment );
+        str.substr( current_line, 0, ebx, first_compartment );
+
+        stralloc( ebx );
+        mov( eax, second_compartment );
+        str.substr( current_line, ebx, ebx, second_compartment );
+
+        mov(0, i);
+        while ( i < ebx ) do
+            mov( 0, j );
+            while ( j < ebx ) do
+                mov( first_compartment, eax );
+                //stdout.put( "first_compartment=", first_compartment, nl);
+                add( i, eax );
+                //stdout.put("eax=", eax, "[eax]=", (type char [eax]), nl);
+                mov( (type char [eax]), al );
+                mov( al, current_first_char );
+
+                mov( second_compartment, eax );
+                add( j, eax );
+                mov( [eax], al );
+                mov( al, current_second_char );
+
+                //stdout.put( "current_first_char=", current_first_char, " current_second_char=", current_second_char, nl);
+                if ( current_first_char = al ) then
+                    mov( al, common_char );
+                    stdout.put( "common char: ", common_char, nl );
+                    jmp EndOfSearch;
+                endif;
+                inc( j );
+            endwhile;
+            add(1, i);
+        endwhile;
+
+    EndOfSearch:
+
+        strfree( first_compartment );
+        strfree( second_compartment );
+
+
+        //Lowercase item types a through z have priorities 1 through 26.
+        //Uppercase item types A through Z have priorities 27 through 52.
+
+        mov( 0, eax );
+        if ( common_char >= 'a' ) then
+            mov( common_char, al );
+            sub( 'a', al );
+            add( 1, al );
+        else
+            mov( common_char, al );
+            sub( 'A', al );
+            add( 27, al );
+        endif;
+        add( eax, sum_of_values );
+
+
+    endwhile;
+
+    stdout.put( "sum_of_values=", sum_of_values, nl );
+
+end aoc2022_3_1;
