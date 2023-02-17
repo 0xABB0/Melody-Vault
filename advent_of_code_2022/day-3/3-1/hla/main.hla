@@ -21,7 +21,7 @@ static
     sum_of_values: uns32;
 begin aoc2022_3_1;
     f.create();
-    f.open( "../input.txt", fileio.r );
+    f.open( "../../input.txt", fileio.r );
 
 	mov( HelloWorld, esi );
 	mov( (type str.strRec [esi]).MaxStrLen, ebx );

@@ -1,0 +1,64 @@
+program aoc2022_3_2;
+    #include( "stdlib.hhf" )
+static
+    f:file;
+
+    current_line:string;
+
+	HelloWorld: string	:= "Hello World";
+
+    first_rucksack: cset;
+    second_rucksack: cset;
+
+    common_char: char;
+
+    i:uns32;
+    j:uns32;
+
+    sum_of_values: uns32;
+begin aoc2022_3_2;
+    mov( 0, sum_of_values );
+    mov( 0, i );
+
+    f.create();
+    f.open( "../../input.txt", fileio.r );
+
+    while( !f.eof() ) do
+        f.a_gets();
+
+        mov( eax, current_line );
+
+        if ( i = 0 ) then
+            cs.strToCset( current_line, first_rucksack );
+            inc( i );
+        elseif ( i = 1 ) then
+            cs.strToCset( current_line, second_rucksack );
+            inc( i );
+        else
+            cs.intersection( first_rucksack, second_rucksack );
+            cs.strToCset( current_line, first_rucksack );
+            cs.intersection( first_rucksack, second_rucksack );
+            cs.extract( second_rucksack ); //should be only one, put in eax
+            mov( al, common_char );
+
+            //mov( 0, eax );
+            if ( al >= 'a' ) then
+                //mov( common_char, al );
+                sub( 'a', al );
+                add( 1, al );
+            else
+                //mov( common_char, al );
+                sub( 'A', al );
+                add( 27, al );
+            endif;
+            add( eax, sum_of_values );
+            
+            mov( 0, i );
+        endif;
+
+
+    endwhile;
+
+    stdout.put( "sum_of_values=", sum_of_values, nl );
+
+end aoc2022_3_2;

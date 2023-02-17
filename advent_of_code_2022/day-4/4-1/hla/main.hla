@@ -1,0 +1,140 @@
+program aoc2022_4_1;
+    #include( "stdlib.hhf" )
+static
+value1:uns32;
+value2:uns32;
+value3:uns32;
+value4:uns32;
+dummy:char;
+inputHandle:dword;
+
+count:uns32 := 0;
+
+current_line:string;
+current_value:string;
+
+last_index:uns32;
+
+current_line_length:uns32;
+
+alloc_size:uns32;
+
+begin aoc2022_4_1;
+    fileio.open( "../../input.txt", fileio.r );
+    mov( eax, inputHandle );
+
+    //since i know values are not going to be that long, im going to allocate 3 bytes per string
+    //in the input file i see only 2 digits per value, so 3 bytes should be enough
+    mov( 3, alloc_size );
+
+    while( !fileio.eof( inputHandle ) ) do
+
+        //row format:
+        //value1-value2,value3-value4
+
+        fileio.a_gets( inputHandle );
+        mov( eax, current_line );
+
+        mov( (type str.strRec [eax]).length, current_line_length );
+
+        // ----FIRST----
+
+        str.chpos( current_line, '-' );
+        mov( eax, ebx );
+        mov( ebx, last_index );
+        
+        //here i can allocate the string with the exact size
+        stralloc( ebx );
+        mov( eax, current_value );
+        str.substr( current_line, 0, ebx, current_value );
+
+        conv.strTou32( current_value, 0 );
+        mov( eax, value1 );
+        //stdout.put( "value1=", value1, nl );
+
+        strfree( current_value );
+
+        // ----SECOND----
+
+        inc( last_index );
+
+        str.chpos( current_line, ',' );
+        mov( eax, ebx );
+
+        stralloc( alloc_size );
+        mov( eax, current_value );
+
+        mov( ebx, ecx );
+        sub( last_index, ecx );
+        str.substr( current_line, last_index, ecx, current_value );
+        mov( ebx, last_index );
+
+        conv.strTou32( current_value, 0 );
+        mov( eax, value2 );
+        //stdout.put( "value2=", value2, nl );
+
+        strfree( current_value );
+
+        // ----THIRD----
+
+        inc( last_index );
+
+        str.rchpos( current_line, '-' );
+        mov( eax, ebx );
+
+        stralloc( alloc_size );
+        mov( eax, current_value );
+
+        mov( ebx, ecx );
+        sub( last_index, ecx );
+        str.substr( current_line, last_index, ecx, current_value );
+        mov( ebx, last_index );
+
+        conv.strTou32( current_value, 0 );
+        mov( eax, value3 );
+        //stdout.put( "value3=", value3, nl );
+
+        strfree( current_value );
+
+        // ----FOURTH----
+        
+        inc( last_index );
+
+        //here i need to allocate from last_index to the end of the string
+        mov( current_line_length, eax);
+        sub( last_index, eax );
+        stralloc( eax );
+        mov( eax, current_value );
+
+        mov( current_line_length, ebx );
+        sub( last_index, ebx );
+        str.substr( current_line, last_index, ebx, current_value );
+
+        conv.strTou32( current_value, 0 );
+        mov( eax, value4 );
+        //stdout.put( "value4=", value4, nl );
+
+        strfree( current_value );
+
+        strfree( current_line );
+
+        // ----CHECK----
+
+        mov( value1, eax );
+        mov( value2, ebx );
+        mov( value3, ecx );
+        mov( value4, edx );
+
+        if ( (eax <= ecx) && (ebx >= edx) ) then
+            inc( count );
+        elseif( (eax >= ecx) && (ebx <= edx) ) then
+            inc( count );
+        endif;
+
+    endwhile;
+
+    fileio.close( inputHandle );
+
+    stdout.put( "count=", count, nl );
+
+end aoc2022_4_1;
